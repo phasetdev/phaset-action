@@ -1,0 +1,92 @@
+name: 'phaset-alpha'
+description: 'Integrates with Phaset (alpha)'
+branding:
+  icon: 'star'
+  color: 'blue'
+inputs:
+  api-key:
+    description: 'Phaset API key'
+    required: true
+  org-id:
+    description: 'Organization ID'
+    required: false
+  record-id:
+    description: 'Record ID'
+    required: false
+  run-record:
+    description: 'Update the record (manifest file)?'
+    required: false
+    default: 'true'
+  run-standards:
+    description: 'Update the standards?'
+    required: false
+    default: 'true'
+  run-deployment:
+    description: 'Run the deployment script?'
+    required: false
+    default: 'false'
+  working-directory:
+    description: 'Working directory containing the manifest (relative to repo root)'
+    required: false
+    default: '.'
+runs:
+  using: "composite"
+  steps:
+    - name: Infer IDs
+      id: infer-ids
+      working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
+      run: |
+        MANIFEST_PATH="phaset.manifest.json"
+
+        if [[ -z "${{ inputs.org-id }}" ]]; then
+          if [[ -f "$MANIFEST_PATH" ]]; then
+            ORG_ID=$(grep -o '"organizationId"[[:space:]]*:[[:space:]]*".*"' "$MANIFEST_PATH" | awk -F':' '{gsub(/[", ]/, "", $2); print $2}')
+            echo "Inferred Organization ID: $ORG_ID"
+          fi
+
+          if [[ -z "$ORG_ID" ]]; then
+            echo "❌ ERROR: Organization ID is not set and could not be inferred from the manifest file!" >&2
+            exit 1
+          fi
+
+          echo "org-id=$ORG_ID" >> "$GITHUB_OUTPUT"
+        else
+          echo "Using provided Org ID: ${{ inputs.org-id }}"
+          echo "org-id=${{ inputs.org-id }}" >> "$GITHUB_OUTPUT"
+        fi
+
+        if [[ -z "${{ inputs.record-id }}" ]]; then
+          if [[ -f "$MANIFEST_PATH" ]]; then
+            RECORD_ID=$(grep -o '"id"[[:space:]]*:[[:space:]]*".*"' "$MANIFEST_PATH" | awk -F':' '{gsub(/[", ]/, "", $2); print $2}')
+            echo "Inferred Record ID: $RECORD_ID"
+          fi
+
+          if [[ -z "$RECORD_ID" ]]; then
+            echo "❌ ERROR: Record ID is not set and could not be inferred from the manifest file!" >&2
+            exit 1
+          fi
+
+          echo "record-id=$RECORD_ID" >> "$GITHUB_OUTPUT"
+        else
+          echo "Using provided Record ID: ${{ inputs.record-id }}"
+          echo "record-id=${{ inputs.record-id }}" >> "$GITHUB_OUTPUT"
+        fi
+      shell: bash
+
+    - name: Update record
+      if: ${{ inputs.run-record == 'true' }}
+      working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
+      run: ${{ github.action_path }}/phaset.sh --org-id ${{ steps.infer-ids.outputs.org-id }} --record-id ${{ steps.infer-ids.outputs.record-id }} --token ${{ inputs.api-key }} --action "record"
+      shell: bash
+
+    - name: Update standards
+      if: ${{ inputs.run-standards == 'true' }}
+      working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
+      run: ${{ github.action_path }}/phaset.sh --org-id ${{ steps.infer-ids.outputs.org-id }} --record-id ${{ steps.infer-ids.outputs.record-id }} --token ${{ inputs.api-key }} --action "standards"
+      shell: bash
+
+    - name: Create deployment event
+      if: ${{ inputs.run-deployment == 'true' }}
+      working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
+      run: ${{ github.action_path }}/phaset.sh --org-id ${{ steps.infer-ids.outputs.org-id }} --record-id ${{ steps.infer-ids.outputs.record-id }} --token ${{ inputs.api-key }} --action "deployment"
+      shell: bash
