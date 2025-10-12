@@ -2,8 +2,6 @@
 
 set -eo pipefail #euo
 
-INTEGRATION_API_URL="https://wheels-sociology-corporate-machines.trycloudflare.com/integration"
-
 MANIFEST_FILE="phaset.manifest.json"
 LINT_FILE="standardlint.json"
 RESULTS_FILE="standardlint.results.json"
@@ -22,6 +20,10 @@ parse_arguments() {
       ;;
     --token)
       TOKEN="$2"
+      shift 2
+      ;;
+    --endpoint)
+      INTEGRATION_API_URL="$2"
       shift 2
       ;;
     --action)
@@ -61,6 +63,11 @@ validate_arguments() {
 
   if [ -z "${TOKEN:-}" ]; then
     echo "❌ ERROR: TOKEN is not set!" >&2
+    return 1
+  fi
+
+  if [ -z "${INTEGRATION_API_URL:-}" ]; then
+    echo "❌ ERROR: ENDPOINT is not set!" >&2
     return 1
   fi
 

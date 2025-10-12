@@ -27,9 +27,9 @@
   "homepage": "https://github.com/phasetdev/phaset-alpha-action",
   "scripts": {
     "test": "bats test.bats",
-    "deploy": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --action \"deployment\"",
-    "standards": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --action \"standards\"",
-    "record": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --action \"record\"",
+    "deploy": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --endpoint \"https://phaset.example.com/integration\" --action \"deployment\"",
+    "standards": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --endpoint \"https://phaset.example.com/integration\" --action \"standards\"",
+    "record": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --endpoint \"https://phaset.example.com/integration\" --action \"record\"",
     "update:v0": "git tag -d v0 && git push origin -d v0 && git tag -a \"v0\" -m \"v0\" && git push origin v0"
   },
   "dependencies": {
