@@ -14,7 +14,7 @@ Please see the [Catalogist documentation](https://github.com/mikaelvesavuori/cat
 
 ### Running the standards check
 
-For the standards check to run and results to be sent, the only thing you need to run this action is a `standardlint.json` configuration file in your root directory.
+For the standards check to run and results to be sent, the [Baseline](https://docs.phaset.dev/knowledge-base/baselines/) connected to the Record will be fetched and used. If one is not defined, the default Baseline will be used.
 
 Please see the [StandardLint documentation](https://github.com/mikaelvesavuori/standardlint#configuration) for more details.
 
