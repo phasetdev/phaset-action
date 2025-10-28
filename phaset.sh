@@ -139,7 +139,7 @@ handle_deployment() {
 }
 EOF
 
-  local url="$INTEGRATION_API_URL/event/$ORG_ID/$RECORD_ID/$TOKEN"
+  local url="$INTEGRATION_API_URL/integration/event/$ORG_ID/$RECORD_ID/$TOKEN"
   if ! send_request "$url" "POST" "$DEPLOYMENT_FILE"; then
     echo "❌ ERROR: Failed to send deployment data." >&2
     rm -f "$DEPLOYMENT_FILE"
@@ -157,7 +157,7 @@ handle_standards() {
 
     baseline_id=$(get_baseline_id)
 
-    local url="$INTEGRATION_API_URL/baselines/$ORG_ID/$baseline_id/$RECORD_ID/$TOKEN"
+    local url="$INTEGRATION_API_URL/integration/baselines/$ORG_ID/$baseline_id/$RECORD_ID/$TOKEN"
 
     curl -s -o "$LINT_FILE" "$url"
 
@@ -171,7 +171,7 @@ handle_standards() {
   fi
 
   if [[ -f "$RESULTS_FILE" ]]; then
-    local url="$INTEGRATION_API_URL/standards/$ORG_ID/$RECORD_ID/$TOKEN"
+    local url="$INTEGRATION_API_URL/integration/standards/$ORG_ID/$RECORD_ID/$TOKEN"
 
     send_request "$url" "POST" "$RESULTS_FILE"
 
@@ -184,7 +184,7 @@ handle_standards() {
 handle_record() {
   echo "Uploading record to Phaset..."
 
-  local url="$INTEGRATION_API_URL/record/$ORG_ID/$RECORD_ID/$TOKEN"
+  local url="$INTEGRATION_API_URL/integration/record/$ORG_ID/$RECORD_ID/$TOKEN"
 
   send_request "$url" "POST" "$MANIFEST_FILE"
 }
