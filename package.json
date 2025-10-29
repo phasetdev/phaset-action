@@ -1,7 +1,7 @@
 {
-  "name": "phaset-action-alpha",
+  "name": "phaset-action",
   "description": "Integrates your data with Phaset",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "Phaset",
   "keywords": [
     "phaset",
@@ -19,12 +19,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/phasetdev/phaset-alpha"
+    "url": "git+https://github.com/phasetdev/phaset-action"
   },
   "bugs": {
-    "url": "https://github.com/phasetdev/phaset-alpha/issues"
+    "url": "https://github.com/phasetdev/phaset-action/issues"
   },
-  "homepage": "https://github.com/phasetdev/phaset-alpha-action",
+  "homepage": "https://github.com/phasetdev/phaset-action-action",
   "scripts": {
     "test": "bats test.bats",
     "deploy": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --endpoint \"https://phaset.example.com\" --action \"deployment\"",
