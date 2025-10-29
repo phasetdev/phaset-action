@@ -30,7 +30,7 @@
     "deploy": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --endpoint \"https://phaset.example.com\" --action \"deployment\"",
     "standards": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --endpoint \"https://phaset.example.com\" --action \"standards\"",
     "record": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --endpoint \"https://phaset.example.com\" --action \"record\"",
-    "update:v0": "git tag -d v0 && git push origin -d v0 && git tag -a \"v0\" -m \"v0\" && git push origin v0"
+    "update:v1": "git tag -d v1 && git push origin -d v1 && git tag -a \"v1\" -m \"v1\" && git push origin v1"
   },
   "dependencies": {
     "standardlint": "latest"
