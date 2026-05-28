@@ -71,6 +71,9 @@ validate_arguments() {
     return 1
   fi
 
+  INTEGRATION_API_URL="${INTEGRATION_API_URL%/}"
+  INTEGRATION_API_URL="${INTEGRATION_API_URL%/integration}"
+
   if [ -z "${ACTION:-}" ]; then
     echo "❌ ERROR: ACTION is not set!" >&2
     return 1
@@ -161,8 +164,7 @@ handle_standards() {
 
     curl -s -o "$LINT_FILE" "$url"
 
-    npm install standardlint
-    npx standardlint --output
+    npx --yes standardlint --output
 
     rm -f $LINT_FILE
   else

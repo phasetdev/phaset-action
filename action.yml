@@ -1,5 +1,5 @@
-name: 'phaset-alpha'
-description: 'Integrates with Phaset (alpha)'
+name: 'phaset-action'
+description: 'Integrates with Phaset'
 branding:
   icon: 'star'
   color: 'blue'
@@ -8,7 +8,7 @@ inputs:
     description: 'Phaset API key'
     required: true
   endpoint:
-    description: 'Phaset API endpoint URL (e.g., https://phaset.example.com/integration)'
+    description: 'Phaset API endpoint URL (e.g., https://phaset.example.com)'
     required: true
   org-id:
     description: 'Organization ID'
@@ -79,17 +79,50 @@ runs:
     - name: Update record
       if: ${{ inputs.run-record == 'true' }}
       working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
-      run: ${{ github.action_path }}/phaset.sh --org-id ${{ steps.infer-ids.outputs.org-id }} --record-id ${{ steps.infer-ids.outputs.record-id }} --token ${{ inputs.api-key }} --endpoint ${{ inputs.endpoint }} --action "record"
+      env:
+        PHASET_ORG_ID: ${{ steps.infer-ids.outputs.org-id }}
+        PHASET_RECORD_ID: ${{ steps.infer-ids.outputs.record-id }}
+        PHASET_API_KEY: ${{ inputs.api-key }}
+        PHASET_ENDPOINT: ${{ inputs.endpoint }}
+      run: |
+        "$GITHUB_ACTION_PATH/phaset.sh" \
+          --org-id "$PHASET_ORG_ID" \
+          --record-id "$PHASET_RECORD_ID" \
+          --token "$PHASET_API_KEY" \
+          --endpoint "$PHASET_ENDPOINT" \
+          --action "record"
       shell: bash
 
     - name: Update standards
       if: ${{ inputs.run-standards == 'true' }}
       working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
-      run: ${{ github.action_path }}/phaset.sh --org-id ${{ steps.infer-ids.outputs.org-id }} --record-id ${{ steps.infer-ids.outputs.record-id }} --token ${{ inputs.api-key }} --endpoint ${{ inputs.endpoint }} --action "standards"
+      env:
+        PHASET_ORG_ID: ${{ steps.infer-ids.outputs.org-id }}
+        PHASET_RECORD_ID: ${{ steps.infer-ids.outputs.record-id }}
+        PHASET_API_KEY: ${{ inputs.api-key }}
+        PHASET_ENDPOINT: ${{ inputs.endpoint }}
+      run: |
+        "$GITHUB_ACTION_PATH/phaset.sh" \
+          --org-id "$PHASET_ORG_ID" \
+          --record-id "$PHASET_RECORD_ID" \
+          --token "$PHASET_API_KEY" \
+          --endpoint "$PHASET_ENDPOINT" \
+          --action "standards"
       shell: bash
 
     - name: Create deployment event
       if: ${{ inputs.run-deployment == 'true' }}
       working-directory: ${{ github.workspace }}/${{ inputs.working-directory }}
-      run: ${{ github.action_path }}/phaset.sh --org-id ${{ steps.infer-ids.outputs.org-id }} --record-id ${{ steps.infer-ids.outputs.record-id }} --token ${{ inputs.api-key }} --endpoint ${{ inputs.endpoint }} --action "deployment"
+      env:
+        PHASET_ORG_ID: ${{ steps.infer-ids.outputs.org-id }}
+        PHASET_RECORD_ID: ${{ steps.infer-ids.outputs.record-id }}
+        PHASET_API_KEY: ${{ inputs.api-key }}
+        PHASET_ENDPOINT: ${{ inputs.endpoint }}
+      run: |
+        "$GITHUB_ACTION_PATH/phaset.sh" \
+          --org-id "$PHASET_ORG_ID" \
+          --record-id "$PHASET_RECORD_ID" \
+          --token "$PHASET_API_KEY" \
+          --endpoint "$PHASET_ENDPOINT" \
+          --action "deployment"
       shell: bash

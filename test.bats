@@ -4,9 +4,11 @@ load './phaset.sh'
 
 # Mock environment variables
 setup() {
+  export TEST_PATH="$PATH"
   export ORG_ID="org123"
   export RECORD_ID="rec123"
   export TOKEN="token123"
+  export INTEGRATION_API_URL="https://phaset.example.com"
   export ACTION="deployment"
   send_request() {
     echo "Mocked send_request called with URL: $1, method: $2, data file: $3"
@@ -15,15 +17,18 @@ setup() {
 }
 
 teardown() {
+  export PATH="$TEST_PATH"
   unset ORG_ID
   unset RECORD_ID
   unset TOKEN
+  unset INTEGRATION_API_URL
   unset ACTION
+  unset TEST_PATH
 }
 
 # Test parse_arguments
 @test "parse_arguments correctly sets variables" {
-  run parse_arguments --org-id "test_org" --record-id "test_record" --token "test_token" --action "deployment"
+  run parse_arguments --org-id "test_org" --record-id "test_record" --token "test_token" --endpoint "https://phaset.example.com" --action "deployment"
   [ "$status" -eq 0 ]
   #[ "$ORG_ID" = "test_org" ]
   #[ "$RECORD_ID" = "test_record" ]
@@ -47,7 +52,7 @@ teardown() {
   unset ORG_ID
   run validate_arguments
   [ "$status" -ne 0 ]
-  [[ "$output" =~ "❌ ERROR: ORG_ID is not set!" ]]
+  [[ "$output" =~ "❌ ERROR: ORG_ID is not set and could not be inferred from 'phaset.manifest.json'!" ]]
 }
 
 @test "validate_arguments fails when RECORD_ID is missing and cannot be inferred" {
@@ -99,6 +104,12 @@ teardown() {
   run validate_arguments
   [ "$status" -ne 0 ]
   [[ "$output" =~ "❌ ERROR: ACTION is not set!" ]]
+}
+
+@test "validate_arguments accepts endpoint with trailing integration path" {
+  INTEGRATION_API_URL="https://phaset.example.com/integration/"
+  validate_arguments
+  [ "$INTEGRATION_API_URL" = "https://phaset.example.com" ]
 }
 
 @test "handle_standards sends results when file exists and baseline is fetched" {

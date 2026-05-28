@@ -2,6 +2,7 @@
   "name": "phaset-action",
   "description": "Integrates your data with Phaset",
   "version": "1.0.0",
+  "license": "MIT",
   "author": "Phaset",
   "keywords": [
     "phaset",
@@ -24,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/phasetdev/phaset-action/issues"
   },
-  "homepage": "https://github.com/phasetdev/phaset-action-action",
+  "homepage": "https://github.com/phasetdev/phaset-action",
   "scripts": {
     "test": "bats test.bats",
     "deploy": "bash phaset.sh --org-id \"demoorg\" --record-id \"demorecord\" --token \"abc123\" --endpoint \"https://phaset.example.com\" --action \"deployment\"",
@@ -33,6 +34,6 @@
     "update:v1": "git tag -d v1 && git push origin -d v1 && git tag -a \"v1\" -m \"v1\" && git push origin v1"
   },
   "dependencies": {
-    "standardlint": "latest"
+    "standardlint": "^1.2.1"
   }
 }

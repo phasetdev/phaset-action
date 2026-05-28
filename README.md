@@ -1,4 +1,4 @@
-# Phaset Action (alpha)
+# Phaset Action
 
 This Action allows you to push a service catalog record and standards (checks) results to your self-hosted Phaset instance.
 
@@ -14,7 +14,7 @@ Please see the [Catalogist documentation](https://github.com/mikaelvesavuori/cat
 
 ### Running the standards check
 
-For the standards check to run and results to be sent, the [Baseline](https://docs.phaset.dev/knowledge-base/baselines/) connected to the Record will be fetched and used. If one is not defined, the default Baseline will be used.
+For the standards check to run and results to be sent, the [Baseline](https://docs.phaset.dev/concepts/baselines/) connected to the Record will be fetched and used. If one is not defined, the default Baseline will be used.
 
 Please see the [StandardLint documentation](https://github.com/mikaelvesavuori/standardlint#configuration) for more details.
 
@@ -30,9 +30,9 @@ Phaset API key.
 
 ### `endpoint`
 
-Your self-hosted Phaset API endpoint URL. This should be the base integration endpoint, typically ending in `/integration`.
+Your self-hosted Phaset API endpoint URL. This should be the base API endpoint.
 
-**Example:** `https://phaset.example.com/integration`
+**Example:** `https://phaset.example.com`
 
 ## Optional input arguments
 
@@ -74,10 +74,10 @@ jobs:
 
       # Do your things here: build, test, deploy...
 
-      - name: Run Phaset action (alpha)
-        uses: phaset/phaset-alpha@v0
+      - name: Run Phaset action
+        uses: phasetdev/phaset-action@v1
         with:
-          endpoint: https://phaset.example.com/integration
+          endpoint: https://phaset.example.com
           api-key: ${{ secrets.PHASET_API_KEY }}
           org-id: 'demoorg'
           record-id: 'demorecord'
@@ -104,11 +104,15 @@ jobs:
       # Your deployment steps here...
 
       - name: Track deployment in Phaset
-        uses: phaset/phaset-alpha@v0
+        uses: phasetdev/phaset-action@v1
         with:
-          endpoint: https://phaset.example.com/integration
+          endpoint: https://phaset.example.com
           api-key: ${{ secrets.PHASET_API_KEY }}
           org-id: 'demoorg'
           record-id: 'demorecord'
           run-deployment: 'true'
 ```
+
+## License
+
+MIT
